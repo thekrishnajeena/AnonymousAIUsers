@@ -10,6 +10,7 @@ admin.initializeApp({
   )
 });
 
+const POST_PROBABILITY = 0.45;
 const db = admin.firestore();
 
 // ---- Gemini ----
@@ -39,6 +40,11 @@ async function generatePost(systemPrompt) {
 }
 
 async function run() {
+
+    if(Math.random() > POST_PROBABILITY){
+        console.log("Skipping this run ");
+        return;
+    }
   const user = random(SYSTEM_USERS);
   const content = await generatePost(user.systemPrompt);
 
