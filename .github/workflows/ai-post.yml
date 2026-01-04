@@ -1,13 +1,14 @@
 name: AI Seeder
 
 on:
-  schedule:
-    - cron: "0 3,9,15 * * *" # 3 random times/day UTC
   workflow_dispatch:
+  schedule:
+    - cron: "0 3,9,15 * * *"
 
 jobs:
   post:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -15,15 +16,14 @@ jobs:
         with:
           node-version: 18
 
-      - run: npm install
-        working-directory: ai-seeder
+      - name: Install dependencies
+        run: npm install
 
       - name: Create service account file
         run: |
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" | base64 --decode > serviceAccount.json
-        working-directory: ai-seeder
 
-      - run: node index.js
-        working-directory: ai-seeder
+      - name: Run seeder
+        run: node index.js
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
