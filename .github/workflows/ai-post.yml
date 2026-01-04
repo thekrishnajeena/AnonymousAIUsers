@@ -1,0 +1,24 @@
+name: AI Seeder
+
+on:
+  schedule:
+    - cron: "0 3,9,15 * * *" # 3 random times/day UTC
+  workflow_dispatch:
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: npm install
+        working-directory: ai-seeder
+
+      - run: node index.js
+        working-directory: ai-seeder
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
